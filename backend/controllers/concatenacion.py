@@ -16,38 +16,32 @@ sys.stdout.reconfigure(encoding='utf-8')
 with open("data/diccionario_fonemas.json") as diccionario_fonemas:
         json_data = json.load(diccionario_fonemas)
 
-def get_cadena_fonemas(cadena_original):
-    cadena_fonemas = cadena_original
-
-    # 1. Utilizar regex para identificar los fonemas dentro de la cadena original
-
-    for index, letra in enumerate(cadena_fonemas):
-        # La "doble l", "ch", "tr" y "ng" son casos especiales, por tanto, se verifica primero
-        # de forma manual.
-        if (letra in json_data.keys()):
-            if (letra == 'l' and index+1 < len(cadena_fonemas) and cadena_fonemas[index+1] == 'l'):
-                # ll
-                cadena_fonemas = re.sub('ll', json_data['ll']['fonema'], cadena_fonemas)
-            elif (letra == 'c' and index+1 < len(cadena_fonemas) and cadena_fonemas[index+1] == 'h'):
-                # ch
-                cadena_fonemas = re.sub('ch', json_data['ch']['fonema'], cadena_fonemas)
-            elif (letra == 't' and index+1 < len(cadena_fonemas) and cadena_fonemas[index+1] == 'r'):
-                # tr
-                cadena_fonemas = re.sub('tr', json_data['tr']['fonema'], cadena_fonemas)
-            elif (letra == 'n' and index+1 < len(cadena_fonemas) and cadena_fonemas[index+1] == 'g'):
-                # ng
-                cadena_fonemas = re.sub('ng', json_data['ng']['fonema'], cadena_fonemas)
-            else:
-                # Por cada una de las letras faltantes (las que ya no vengan en formato de fonema /x/) realizar el reemplazo.
-                cadena_fonemas = re.sub(letra, json_data[letra]['fonema'], cadena_fonemas)
-
-    print(cadena_fonemas) 
-
-    #print(cadena_fonemas)
-    return cadena_fonemas
-
 def get_cadena_pronunciable(cadena_original):
-    return
+    cadena_pronunciable = cadena_original
 
-get_cadena_fonemas("llichntallulng")
+    # Recorriendo letras del string recibido, una por una
+    for index, letra in enumerate(cadena_pronunciable):
+        hay_siguiente_letra = index + 1 < len(cadena_pronunciable) 
+        siguiente_letra = cadena_pronunciable[index+1] if hay_siguiente_letra else None
 
+        # Primero, se verifican casos especiales ('ch', 'tr', 'ng')
+        if (letra == "c" and siguiente_letra == "h"):
+            cadena_pronunciable = re.sub('ch', json_data['ch']['pronunciacion'], cadena_pronunciable)
+        elif (letra == 't' and siguiente_letra == 'r'):
+            cadena_pronunciable = re.sub('tr', json_data['tr']['pronunciacion'], cadena_pronunciable)
+        elif (letra == 'n' and siguiente_letra == 'g'):
+            cadena_pronunciable = re.sub('ng', json_data['ng']['pronunciacion'], cadena_pronunciable)
+        else:
+            # Cualquier otra letra individual (fuera de casos especiales)
+
+            if (letra in json_data.keys()):
+                # Si la letra está en el diccionario
+                cadena_pronunciable = re.sub(letra, json_data[letra]['pronunciacion'], cadena_pronunciable)
+
+             # Si la letra no está en el diccionario, se deja como viene, es decir, no se reemplaza.
+        
+    return cadena_pronunciable
+
+
+cadena_pronunciable = get_cadena_pronunciable("llichntallulng")
+#print(cadena_pronunciable)
