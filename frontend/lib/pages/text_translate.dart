@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/settings.dart';
 
@@ -10,21 +12,51 @@ class TextTranslate extends StatefulWidget {
 }
 
 class _TextTranslateState extends State<TextTranslate> {
+  String? currentValue = '  Español-Mapudungún';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: bColor(widget.value),
         appBar: bar(context, widget.value),
-        body: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: buildMessage(widget.value),
+        body: Scaffold(
+          backgroundColor: bColor(widget.value),
+          appBar: AppBar(
+            backgroundColor: bColor(widget.value),
+            elevation: 0,
+            title: Center(
+                child: Container(
+              color: const Color.fromARGB(255, 147, 147, 147).withOpacity(0.2),
+              child: DropdownButton(
+                items: <String>['  Español-Mapudungún', '  Inglés-Español']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                value: currentValue,
+                onChanged: (String? valueIn) {
+                  setState(() {
+                    currentValue = valueIn;
+                  });
+                },
+                iconEnabledColor: const Color.fromARGB(255, 0, 152, 80),
+                iconDisabledColor: const Color.fromARGB(255, 0, 152, 80),
+                iconSize: 50,
               ),
             )),
+          ),
+          body: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: buildMessage(widget.value),
+                ),
+              )),
+        ),
       ),
     );
   }
