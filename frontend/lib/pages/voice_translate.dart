@@ -64,8 +64,18 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
             elevation: 0,
             title: Center(
                 child: Container(
-              color: const Color.fromARGB(255, 147, 147, 147).withOpacity(0.2),
-              child: DropdownButton(
+              decoration: BoxDecoration(
+                color:
+                    const Color.fromARGB(255, 147, 147, 147).withOpacity(0.2),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                    color: const Color.fromARGB(255, 147, 147, 147),
+                    style: BorderStyle.solid,
+                    width: 0.80),
+              ),
+              height: 50,
+              width: 250,
+              child: DropdownButtonFormField(
                 items: <String>['  Español-Mapudungún', '  Inglés-Español']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
