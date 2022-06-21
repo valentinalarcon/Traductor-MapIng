@@ -29,6 +29,8 @@ environment:
 dependencies:
   avatar_glow: ^2.0.2
   speech_to_text: ^5.1.1
+  flutter_tts: ^3.4.0
+  bubble: ^1.2.1
   flutter:
     sdk: flutter
 

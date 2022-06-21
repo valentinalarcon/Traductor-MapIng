@@ -1,6 +1,8 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/models/modelos.dart';
 import 'package:frontend/pages/settings.dart';
+import 'package:frontend/widgets/mensajes.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -14,11 +16,11 @@ class VoiceTranslate extends StatefulWidget {
 
 class _VoiceTranslateState extends State<VoiceTranslate> {
   String? currentValue = '  Español-Mapudungún';
-  final SpeechToText _speech = SpeechToText(); // Hay que modificar
-  final bool _speechEnabled = false;
+  final _speech = SpeechToText();
+  bool _speechEnabled = false;
   String _text = '';
   String traducir = "";
-  List<String> _mensajes = []; //Hay que modificar
+  final List<Message> _mensajes = [];
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,7 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
   // Función que evalua la disponibilidad del microfono
 
   void _initSpeech() async {
-    //_speechEnabled = await _speech.initialize();
+    _speechEnabled = await _speech.initialize();
     setState(() {});
   }
 
@@ -99,8 +101,8 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
             onTap: () => FocusScope.of(context).unfocus(),
             child: Column(
               children: <Widget>[
-                idk(),
-                barraEnvio(widget.value),
+                idk(_mensajes),
+                barraEnvio(widget.value, _speechEnabled, _text),
                 Container(
                   // separación entre barra y boton
                   padding: const EdgeInsets.only(bottom: 90),
@@ -118,8 +120,8 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
           repeat: true,
           child: FloatingActionButton(
             backgroundColor: const Color.fromARGB(255, 0, 152, 80),
-            onPressed: null,
-            //_speech.isNotListening ? _startListening : _stopListening,
+            onPressed:
+                _speech.isNotListening ? _startListening : _stopListening,
             tooltip: 'Listen',
             child: Icon(_speech.isNotListening ? Icons.mic_off : Icons.mic),
           ),
@@ -156,7 +158,7 @@ AppBar bar(context, value) {
   );
 }
 
-Widget idk() {
+Widget idk(enviados) {
   return Expanded(
       child: Container(
     decoration: const BoxDecoration(
@@ -164,17 +166,17 @@ Widget idk() {
       topLeft: Radius.circular(30.0),
       topRight: Radius.circular(30.0),
     )),
-    child: const ClipRRect(
-      borderRadius: BorderRadius.only(
+    child: ClipRRect(
+      borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
-      //child: Funcion(
-      //mensajes: _mensajes,
-      //textoInicial: "Presione el mic para empezar grabacion"),
+      child: Mensajes(
+          mensajes: enviados,
+          textoInicial: "Presione el mic para empezar grabacion"),
     ),
   ));
 }
 
-Widget barraEnvio(value) {
+Widget barraEnvio(value, speechEnabled, text) {
   return Container(
     decoration: const BoxDecoration(
         color: Color.fromARGB(255, 217, 217, 217),
@@ -189,8 +191,7 @@ Widget barraEnvio(value) {
       children: [
         Expanded(
           child: Text(
-            "",
-            //_speechEnabled ? '$_text' : 'Speech no está disponible',
+            speechEnabled ? '$text' : 'Speech no está disponible',
             style: TextStyle(color: tColor(value)),
             textAlign: TextAlign.center,
           ),
