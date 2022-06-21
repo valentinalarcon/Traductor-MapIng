@@ -1,5 +1,6 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:frontend/models/modelos.dart';
 import 'package:frontend/pages/settings.dart';
 import 'package:frontend/widgets/mensajes.dart';
@@ -17,10 +18,18 @@ class VoiceTranslate extends StatefulWidget {
 class _VoiceTranslateState extends State<VoiceTranslate> {
   String? currentValue = '  Español-Mapudungún';
   final _speech = SpeechToText();
+  final _tts = FlutterTts();
   bool _speechEnabled = false;
   String _text = '';
   String traducir = "";
   final List<Message> _mensajes = [];
+
+  speak(String texto) async {
+    await _tts.setLanguage("en-US");
+    await _tts.setPitch(1); // 0.5 - 1.5
+    await _tts.speak(texto);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -103,6 +112,11 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
               children: <Widget>[
                 idk(_mensajes),
                 barraEnvio(widget.value, _speechEnabled, _text),
+                //Temporal, meintras se generan endpoints
+                ElevatedButton(
+                    onPressed: () => speak("I don't know"),
+                    child: Text("button")),
+                // hasta aquí es temporal
                 Container(
                   // separación entre barra y boton
                   padding: const EdgeInsets.only(bottom: 90),

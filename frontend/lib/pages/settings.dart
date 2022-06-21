@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main.dart';
 import 'package:frontend/pages/informacion_equipo.dart';
 import 'package:frontend/pages/page_controller.dart';
 
@@ -15,45 +14,39 @@ class _ConfigAppState extends State<ConfigApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Config",
       home: Scaffold(
-        backgroundColor: bColor(widget.value),
-        appBar: AppBar(
           backgroundColor: bColor(widget.value),
-          title: bar(context, widget.value),
-          automaticallyImplyLeading: true,
-        ),
-        body: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 10,
-            ),
-            APIroute(widget.value),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: <Widget>[
-                temaTexto(widget.value),
-                const SizedBox(
-                  width: 280,
-                ),
-                buildSwitch()
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              children: [temaOpcion(widget.value)],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            infoEquipo(context, widget.value)
-          ],
-        ),
-      ),
+          appBar: bar(context, widget.value),
+          body: Column(
+            children: <Widget>[
+              const SizedBox(
+                height: 10,
+              ),
+              APIroute(widget.value),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: <Widget>[
+                  temaTexto(widget.value),
+                  const SizedBox(
+                    width: 200,
+                  ),
+                  buildSwitch()
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [temaOpcion(widget.value)],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              infoEquipo(context, widget.value)
+            ],
+          )),
     );
   }
 
@@ -69,33 +62,32 @@ class _ConfigAppState extends State<ConfigApp> {
 AppBar bar(context, value) {
   return AppBar(
     backgroundColor: bColor(value),
-    title: Row(
-      children: <Widget>[
-        IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TPageController(value)),
-            );
-          },
-          icon: Icon(Icons.arrow_back_outlined, color: tColor(value)),
-          iconSize: 50,
-        ),
-        SizedBox(
-          width: 200,
-          height: 50,
-          child: Center(
-              child: Text(
+    title: Row(children: [
+      IconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TPageController(value)),
+          );
+        },
+        icon: Icon(Icons.arrow_back_outlined, color: tColor(value)),
+        iconSize: 45,
+      ),
+      SizedBox(
+        width: 200,
+        height: 50,
+        child: Center(
+          child: Text(
             "Configuración",
             style: TextStyle(
                 color: tColor(value),
                 fontFamily: 'Inter',
-                fontSize: 17,
+                fontSize: 20,
                 fontWeight: FontWeight.w900),
-          )),
+          ),
         ),
-      ],
-    ),
+      ),
+    ]),
   );
 }
 

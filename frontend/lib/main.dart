@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/pages/page_controller.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 bool value = true;
