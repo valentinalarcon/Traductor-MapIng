@@ -14,6 +14,7 @@ class ConfigApp extends StatefulWidget {
 class _ConfigAppState extends State<ConfigApp> {
   @override
   Widget build(BuildContext context) {
+    final myController = TextEditingController();
     return MaterialApp(
       home: Scaffold(
           backgroundColor: bColor(widget.value),
@@ -23,7 +24,38 @@ class _ConfigAppState extends State<ConfigApp> {
               const SizedBox(
                 height: 10,
               ),
-              APIroute(widget.value, widget._direccion),
+              Container(
+                decoration: const BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.grey, width: 2))),
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                height: 50.0,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: TextField(
+                      controller: myController,
+                      style: TextStyle(color: tColor(widget.value)),
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: const InputDecoration(
+                        hintText: "Ruta API ej: http://10.0.2.2:5000",
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                    )),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            widget._direccion = myController.text;
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.send_rounded,
+                          color: Colors.grey,
+                        ))
+                  ],
+                ),
+              ),
+              //APIroute(widget.value, widget._direccion),
               const SizedBox(
                 height: 10,
               ),

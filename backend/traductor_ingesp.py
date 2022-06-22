@@ -3,7 +3,7 @@ from googletrans import Translator
 
 def translate_ingesp(source):
     translator = Translator()
-    target = translator.translate(source)
+    target = translator.translate(source, dest='es')
 
     print("Frase original:", source)
     print("Traducción:", target.text)

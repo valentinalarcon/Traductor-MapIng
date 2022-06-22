@@ -24,9 +24,9 @@ class _BotonTTSState extends State<BotonTTS> {
 
   Future _configs() async {
     if (widget.speaker) {
-      await flutterTts.setLanguage("es-CL");
+      await flutterTts.setLanguage("ru-RU");
     } else {
-      await flutterTts.setLanguage("en-US");
+      await flutterTts.setLanguage("es-CL");
     }
   }
 
@@ -36,7 +36,6 @@ class _BotonTTSState extends State<BotonTTS> {
   }
 
   Future<void> _init() async {
-    await _configs();
     if (widget.autoplay && !(_autoplayDone)) {
       _speak(widget.texto);
       _autoplayDone = true;

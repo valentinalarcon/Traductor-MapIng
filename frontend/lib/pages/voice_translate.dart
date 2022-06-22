@@ -21,18 +21,11 @@ class VoiceTranslate extends StatefulWidget {
 class _VoiceTranslateState extends State<VoiceTranslate> {
   String? currentValue = '  Español-Mapudungún';
   final _speech = SpeechToText();
-  final _tts = FlutterTts();
   bool _speechEnabled = false;
   bool mapudungun = false;
   String _text = '';
   String traducir = "";
   final List<Message> _mensajes = [];
-
-  speak(String texto) async {
-    await _tts.setLanguage("en-US");
-    await _tts.setPitch(1); // 0.5 - 1.5
-    await _tts.speak(texto);
-  }
 
   @override
   void initState() {
@@ -92,6 +85,7 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
               height: 50,
               width: 250,
               child: DropdownButtonFormField(
+                hint: const Text("   Seleccionar idioma"),
                 items: <String>['  Español-Mapudungún', '  Inglés-Español']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -99,7 +93,6 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
                     child: Text(value),
                   );
                 }).toList(),
-                value: currentValue,
                 onChanged: (String? valueIn) {
                   setState(() {
                     currentValue = valueIn;
@@ -145,8 +138,8 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
                       IconButton(
                           onPressed: () async {
                             aux = _text;
-                            String translate =
-                                await conectar(currentValue, aux);
+                            String translate = await conectar(
+                                currentValue, aux, widget._direccion);
                             setState(() {
                               _mensajes.insert(0, Message(aux, true));
                               _mensajes.insert(0, Message(translate, false));
@@ -160,13 +153,6 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
                     ],
                   ),
                 ),
-
-                //Temporal, meintras se generan endpoints
-                ElevatedButton(
-                    onPressed: () => speak("yes, indeed"),
-                    child: Text("button")),
-                // hasta aquí es temporal
-
                 Container(
                   // separación entre barra y boton
                   padding: const EdgeInsets.only(bottom: 90),
@@ -194,14 +180,11 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
     );
   }
 
-  Future<String> conectar(state, text) async {
-    const List<String> url = [
-      "http://10.0.2.2:5000/translator/espmap",
-      "http://10.0.2.2:5000/translator/ingesp"
-    ];
-    String actual = url[1];
+  Future<String> conectar(state, text, direccion) async {
+    const List<String> url = ["/translator/espmap", "/translator/ingesp"];
+    String actual = direccion + url[1];
     if (state == '  Español-Mapudungún') {
-      actual = url[0];
+      actual = direccion + url[0];
     }
     var connect = Uri.parse(actual);
     Map data = {"text": text};
