@@ -6,12 +6,13 @@ class Mensaje extends StatefulWidget {
   final String texto;
   final bool isMe;
   final bool autoplay;
-
+  final bool speaker;
   const Mensaje(
       {Key? key,
       required this.texto,
       required this.isMe,
-      required this.autoplay})
+      required this.autoplay,
+      required this.speaker})
       : super(key: key);
 
   @override
@@ -39,6 +40,7 @@ class _MensajeState extends State<Mensaje> {
             BotonTTS(
               texto: widget.texto,
               autoplay: widget.autoplay,
+              speaker: widget.speaker,
             )
         ])));
   }

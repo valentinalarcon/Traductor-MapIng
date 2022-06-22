@@ -4,7 +4,9 @@ import 'package:frontend/pages/voice_translate.dart';
 
 class TPageController extends StatefulWidget {
   final bool value;
-  const TPageController(this.value, {Key? key}) : super(key: key);
+  final String _direccion;
+  const TPageController(this.value, this._direccion, {Key? key})
+      : super(key: key);
 
   @override
   State<TPageController> createState() => _TPageControllerState();
@@ -16,8 +18,8 @@ class _TPageControllerState extends State<TPageController> {
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
-      TextTranslate(widget.value),
-      VoiceTranslate(widget.value)
+      TextTranslate(widget.value, widget._direccion),
+      VoiceTranslate(widget.value, widget._direccion)
     ];
     return MaterialApp(
       home: Scaffold(

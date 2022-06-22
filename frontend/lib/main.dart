@@ -6,6 +6,7 @@ void main() {
 }
 
 bool value = true;
+String _direccion = "";
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Traductor",
-      home: TPageController(value),
+      home: TPageController(value, _direccion),
     );
   }
 }

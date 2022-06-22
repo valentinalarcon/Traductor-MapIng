@@ -4,7 +4,8 @@ import 'package:frontend/pages/page_controller.dart';
 
 class ConfigApp extends StatefulWidget {
   bool value;
-  ConfigApp(this.value, {Key? key}) : super(key: key);
+  String _direccion;
+  ConfigApp(this.value, this._direccion, {Key? key}) : super(key: key);
 
   @override
   State<ConfigApp> createState() => _ConfigAppState();
@@ -16,13 +17,13 @@ class _ConfigAppState extends State<ConfigApp> {
     return MaterialApp(
       home: Scaffold(
           backgroundColor: bColor(widget.value),
-          appBar: bar(context, widget.value),
+          appBar: bar(context, widget.value, widget._direccion),
           body: Column(
             children: <Widget>[
               const SizedBox(
                 height: 10,
               ),
-              APIroute(widget.value),
+              APIroute(widget.value, widget._direccion),
               const SizedBox(
                 height: 10,
               ),
@@ -44,7 +45,7 @@ class _ConfigAppState extends State<ConfigApp> {
               const SizedBox(
                 height: 20,
               ),
-              infoEquipo(context, widget.value)
+              infoEquipo(context, widget.value, widget._direccion)
             ],
           )),
     );
@@ -59,7 +60,7 @@ class _ConfigAppState extends State<ConfigApp> {
       onChanged: (value) => setState(() => widget.value = value));
 }
 
-AppBar bar(context, value) {
+AppBar bar(context, value, direccion) {
   return AppBar(
     backgroundColor: bColor(value),
     title: Row(children: [
@@ -67,7 +68,8 @@ AppBar bar(context, value) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => TPageController(value)),
+            MaterialPageRoute(
+                builder: (context) => TPageController(value, direccion)),
           );
         },
         icon: Icon(Icons.arrow_back_outlined, color: tColor(value)),
@@ -91,7 +93,8 @@ AppBar bar(context, value) {
   );
 }
 
-Widget APIroute(value) {
+Widget APIroute(value, direccion) {
+  final myController = TextEditingController();
   return Container(
     decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: Colors.grey, width: 2))),
@@ -101,16 +104,20 @@ Widget APIroute(value) {
       children: <Widget>[
         Expanded(
             child: TextField(
+          controller: myController,
           style: TextStyle(color: tColor(value)),
           textCapitalization: TextCapitalization.sentences,
           decoration: const InputDecoration(
-            hintText: "Ruta API",
+            hintText: "Ruta API ej: http://10.0.2.2:5000",
             hintStyle: TextStyle(color: Colors.grey),
           ),
         )),
-        const IconButton(
-            onPressed: null,
-            icon: Icon(
+        IconButton(
+            onPressed: () {
+              direccion = myController.text;
+              print(direccion);
+            },
+            icon: const Icon(
               Icons.send_rounded,
               color: Colors.grey,
             ))
@@ -157,7 +164,7 @@ Color tColor(value) {
   return temas[value ? 0 : 1];
 }
 
-Widget infoEquipo(context, value) {
+Widget infoEquipo(context, value, direccion) {
   return Container(
       height: 80,
       decoration: const BoxDecoration(
@@ -166,8 +173,10 @@ Widget infoEquipo(context, value) {
               top: BorderSide(color: Colors.grey, width: 2))),
       child: ListTile(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => InfoEquipo(value)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => InfoEquipo(value, direccion)));
         },
         title: Row(
           children: <Widget>[

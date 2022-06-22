@@ -6,8 +6,13 @@ import 'mensaje.dart';
 class Mensajes extends StatefulWidget {
   final String textoInicial;
   final List<Message> mensajes;
+  final bool speaker;
 
-  const Mensajes({Key? key, required this.textoInicial, required this.mensajes})
+  const Mensajes(
+      {Key? key,
+      required this.textoInicial,
+      required this.mensajes,
+      required this.speaker})
       : super(key: key);
 
   @override
@@ -33,7 +38,11 @@ class _MensajesState extends State<Mensajes> {
         } else {
           final Message message = widget.mensajes[index];
           return Mensaje(
-              texto: message.body, isMe: message.isMe, autoplay: (index == 0));
+            texto: message.body,
+            isMe: message.isMe,
+            autoplay: (index == 0),
+            speaker: widget.speaker,
+          );
         }
       },
     );

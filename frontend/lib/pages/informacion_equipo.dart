@@ -3,7 +3,8 @@ import 'package:frontend/pages/settings.dart';
 
 class InfoEquipo extends StatefulWidget {
   final bool value;
-  const InfoEquipo(this.value, {Key? key}) : super(key: key);
+  final String _direccion;
+  const InfoEquipo(this.value, this._direccion, {Key? key}) : super(key: key);
 
   @override
   State<InfoEquipo> createState() => _InfoEquipoState();
@@ -15,14 +16,14 @@ class _InfoEquipoState extends State<InfoEquipo> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: bar(context, widget.value),
+        appBar: bar(context, widget.value, widget._direccion),
         backgroundColor: bColor(widget.value),
       ),
     );
   }
 }
 
-AppBar bar(context, value) {
+AppBar bar(context, value, direccion) {
   return AppBar(
     backgroundColor: bColor(value),
     title: Row(
@@ -31,7 +32,8 @@ AppBar bar(context, value) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ConfigApp(value)),
+              MaterialPageRoute(
+                  builder: (context) => ConfigApp(value, direccion)),
             );
           },
           icon: Icon(Icons.arrow_back_outlined, color: tColor(value)),

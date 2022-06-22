@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -6,10 +7,12 @@ import 'package:frontend/pages/settings.dart';
 import 'package:frontend/widgets/mensajes.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:http/http.dart' as http;
 
 class VoiceTranslate extends StatefulWidget {
   final bool value;
-  VoiceTranslate(this.value, {Key? key}) : super(key: key);
+  final String _direccion;
+  VoiceTranslate(this.value, this._direccion, {Key? key}) : super(key: key);
 
   @override
   State<VoiceTranslate> createState() => _VoiceTranslateState();
@@ -20,6 +23,7 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
   final _speech = SpeechToText();
   final _tts = FlutterTts();
   bool _speechEnabled = false;
+  bool mapudungun = false;
   String _text = '';
   String traducir = "";
   final List<Message> _mensajes = [];
@@ -64,10 +68,11 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
 
   @override
   Widget build(BuildContext context) {
+    String aux = "";
     return MaterialApp(
       home: Scaffold(
         backgroundColor: bColor(widget.value),
-        appBar: bar(context, widget.value),
+        appBar: bar(context, widget.value, widget._direccion),
         body: Scaffold(
           backgroundColor: bColor(widget.value),
           appBar: AppBar(
@@ -98,6 +103,11 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
                 onChanged: (String? valueIn) {
                   setState(() {
                     currentValue = valueIn;
+                    if (currentValue == '  Español-Mapudungún') {
+                      mapudungun = true;
+                    } else {
+                      mapudungun = false;
+                    }
                   });
                 },
                 iconEnabledColor: const Color.fromARGB(255, 0, 152, 80),
@@ -110,13 +120,53 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
             onTap: () => FocusScope.of(context).unfocus(),
             child: Column(
               children: <Widget>[
-                idk(_mensajes),
-                barraEnvio(widget.value, _speechEnabled, _text),
+                idk(_mensajes, mapudungun),
+                Container(
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 217, 217, 217),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
+                        bottomLeft: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0),
+                      )),
+                  padding: const EdgeInsets.only(bottom: 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _speechEnabled
+                              ? '$_text'
+                              : 'Speech no está disponible',
+                          style: const TextStyle(color: Colors.black),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () async {
+                            aux = _text;
+                            String translate =
+                                await conectar(currentValue, aux);
+                            setState(() {
+                              _mensajes.insert(0, Message(aux, true));
+                              _mensajes.insert(0, Message(translate, false));
+                              _text = "";
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.send_rounded,
+                            color: Color.fromARGB(255, 0, 152, 80),
+                          ))
+                    ],
+                  ),
+                ),
+
                 //Temporal, meintras se generan endpoints
                 ElevatedButton(
-                    onPressed: () => speak("I don't know"),
+                    onPressed: () => speak("yes, indeed"),
                     child: Text("button")),
                 // hasta aquí es temporal
+
                 Container(
                   // separación entre barra y boton
                   padding: const EdgeInsets.only(bottom: 90),
@@ -143,9 +193,31 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
       ),
     );
   }
+
+  Future<String> conectar(state, text) async {
+    const List<String> url = [
+      "http://10.0.2.2:5000/translator/espmap",
+      "http://10.0.2.2:5000/translator/ingesp"
+    ];
+    String actual = url[1];
+    if (state == '  Español-Mapudungún') {
+      actual = url[0];
+    }
+    var connect = Uri.parse(actual);
+    Map data = {"text": text};
+    var body = jsonEncode(data);
+    var response = await http.post(connect,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Accept": "*/*",
+          "Accept-Encoding": "gzip, deflate,br"
+        },
+        body: body);
+    return utf8.decode(response.bodyBytes);
+  }
 }
 
-AppBar bar(context, value) {
+AppBar bar(context, value, direccion) {
   return AppBar(
     backgroundColor: bColor(value),
     title: Text(
@@ -161,7 +233,8 @@ AppBar bar(context, value) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ConfigApp(value)),
+            MaterialPageRoute(
+                builder: (context) => ConfigApp(value, direccion)),
           );
         },
         icon: const Icon(Icons.settings,
@@ -172,7 +245,7 @@ AppBar bar(context, value) {
   );
 }
 
-Widget idk(enviados) {
+Widget idk(enviados, mapudungun) {
   return Expanded(
       child: Container(
     decoration: const BoxDecoration(
@@ -185,40 +258,10 @@ Widget idk(enviados) {
           topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
       child: Mensajes(
           mensajes: enviados,
-          textoInicial: "Presione el mic para empezar grabacion"),
+          textoInicial: "Presione el mic para empezar grabacion",
+          speaker: mapudungun),
     ),
   ));
-}
-
-Widget barraEnvio(value, speechEnabled, text) {
-  return Container(
-    decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 217, 217, 217),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
-          bottomLeft: Radius.circular(15.0),
-          bottomRight: Radius.circular(15.0),
-        )),
-    padding: const EdgeInsets.only(bottom: 0),
-    child: Row(
-      children: [
-        Expanded(
-          child: Text(
-            speechEnabled ? '$text' : 'Speech no está disponible',
-            style: TextStyle(color: tColor(value)),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        const IconButton(
-            onPressed: null,
-            icon: Icon(
-              Icons.send_rounded,
-              color: Color.fromARGB(255, 0, 152, 80),
-            ))
-      ],
-    ),
-  );
 }
 
 Color bColor(value) {
