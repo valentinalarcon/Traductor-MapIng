@@ -4,6 +4,7 @@ from services import t_esp_map, t_ing_esp
 
 
 application = Flask(__name__)
+application.config['JSON_AS_ASCII'] = False
 cors = CORS(application, resources={r"/translator/*": {"origins": "*"}})
 application.config['CORS_HEADERS'] = 'Content-Type'
 

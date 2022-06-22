@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:frontend/models/modelos.dart';
 import 'package:frontend/pages/settings.dart';
 import 'package:frontend/widgets/mensajes.dart';

@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'package:frontend/widgets/buildMessage.dart';
+import 'package:frontend/models/modelos.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:frontend/pages/settings.dart';
+import 'package:frontend/widgets/mensajes.dart';
 
 class TextTranslate extends StatefulWidget {
   final bool value;
@@ -16,6 +17,8 @@ class TextTranslate extends StatefulWidget {
 class _TextTranslateState extends State<TextTranslate> {
   String? currentValue = '  Español-Mapudungún';
   final myController = TextEditingController();
+  bool mapudungun = false;
+  final List<Message> _mensajes = [];
 
   @override
   void dispose() {
@@ -26,6 +29,7 @@ class _TextTranslateState extends State<TextTranslate> {
 
   @override
   Widget build(BuildContext context) {
+    String temp;
     return MaterialApp(
         home: Scaffold(
       backgroundColor: bColor(widget.value),
@@ -48,6 +52,7 @@ class _TextTranslateState extends State<TextTranslate> {
             height: 50,
             width: 250,
             child: DropdownButtonFormField(
+              hint: const Text("   Seleccionar idioma"),
               items: <String>['  Español-Mapudungún', '  Inglés-Español']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
@@ -55,10 +60,14 @@ class _TextTranslateState extends State<TextTranslate> {
                   child: Text(value),
                 );
               }).toList(),
-              value: currentValue,
               onChanged: (String? valueIn) {
                 setState(() {
                   currentValue = valueIn;
+                  if (currentValue == '  Español-Mapudungún') {
+                    mapudungun = true;
+                  } else {
+                    mapudungun = false;
+                  }
                 });
               },
               iconEnabledColor: const Color.fromARGB(255, 0, 152, 80),
@@ -68,20 +77,85 @@ class _TextTranslateState extends State<TextTranslate> {
           )),
         ),
         body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: BuildMessage(
-                  myController,
-                  currentValue,
-                  widget._direccion,
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: SizedBox(
+                    child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        child: Mensajes(
+                            mensajes: _mensajes,
+                            textoInicial:
+                                "Envia cualquier frase para empezar a traducir",
+                            speaker: mapudungun)),
+                  ),
                 ),
-              )),
-        ),
+                Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                        height: 50.0,
+                        color: const Color.fromARGB(255, 217, 217, 217),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                                child: TextField(
+                              controller: myController,
+                              style: const TextStyle(color: Colors.black),
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: const InputDecoration(
+                                hintText: "Escribe frase para traducir",
+                                hintStyle: TextStyle(color: Colors.black),
+                              ),
+                            )),
+                            IconButton(
+                                onPressed: () async {
+                                  temp = myController.text;
+                                  String traducido = await conectar(
+                                      currentValue, temp, widget._direccion);
+                                  setState(() {
+                                    _mensajes.insert(0, Message(temp, true));
+                                    _mensajes.insert(
+                                        0, Message(traducido, false));
+                                    myController.text = "";
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.send_rounded,
+                                  color: Color.fromARGB(255, 0, 152, 80),
+                                ))
+                          ],
+                        ),
+                      ),
+                    )),
+              ],
+            )),
       ),
     ));
+  }
+
+  Future<String> conectar(state, text, direccion) async {
+    const List<String> url = ["/translator/espmap", "/translator/ingesp"];
+    String actual = direccion + url[1];
+    if (state == '  Español-Mapudungún') {
+      actual = direccion + url[0];
+    }
+    var connect = Uri.parse(actual);
+    Map data = {"text": text};
+    var body = jsonEncode(data);
+    var response = await http.post(connect,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Accept": "*/*",
+        },
+        body: body);
+    return utf8.decode(response.bodyBytes);
   }
 }
 
