@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class BotonTTS extends StatefulWidget {
   final String texto;
@@ -23,11 +26,7 @@ class _BotonTTSState extends State<BotonTTS> {
   FlutterTts flutterTts = FlutterTts();
 
   Future _configs() async {
-    if (widget.speaker) {
-      await flutterTts.setLanguage("ru-RU");
-    } else {
-      await flutterTts.setLanguage("es-CL");
-    }
+    await flutterTts.setLanguage("es-CL");
   }
 
   Future _speak(texto) async {
@@ -56,6 +55,27 @@ class _BotonTTSState extends State<BotonTTS> {
     }
   }
 
+  void mapudungun() async {
+    AudioCache player = AudioCache();
+    String url = "http://10.0.2.2:5000/translator/ttsmap";
+    var connect = Uri.parse(url);
+    Map data = {"text": widget.texto};
+    var body = jsonEncode(data);
+    var response = await http.post(connect,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Accept": "*/*",
+        },
+        body: body);
+    var temp = response.body;
+    //player.loadAll(temp)
+    for (int i = 0; i < response.bodyBytes.length; i++) {
+      final player = AudioCache();
+      String aux = temp[0];
+      print(aux);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return (IconButton(
@@ -63,7 +83,11 @@ class _BotonTTSState extends State<BotonTTS> {
       tooltip: 'Escuchar',
       color: Colors.black,
       onPressed: () {
-        _speak(widget.texto);
+        if (widget.speaker) {
+          mapudungun();
+        } else {
+          _speak(widget.texto);
+        }
       },
     ));
   }
