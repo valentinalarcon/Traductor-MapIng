@@ -7,12 +7,14 @@ class Mensajes extends StatefulWidget {
   final String textoInicial;
   final List<Message> mensajes;
   final bool speaker;
+  final String direccion;
 
   const Mensajes(
       {Key? key,
       required this.textoInicial,
       required this.mensajes,
-      required this.speaker})
+      required this.speaker,
+      required this.direccion})
       : super(key: key);
 
   @override
@@ -42,6 +44,7 @@ class _MensajesState extends State<Mensajes> {
             isMe: message.isMe,
             autoplay: (index == 0),
             speaker: widget.speaker,
+            direccion: widget.direccion,
           );
         }
       },

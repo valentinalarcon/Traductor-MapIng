@@ -36,7 +36,9 @@ def tts_map(data):
     rutas = []
     try:
         cadena = stringToFonema(sentence, json_data)
+        print(cadena)
         fonemasToRuta(cadena, rutas)
+        print(rutas)
         return rutas
     except Exception:
-        return "backend/Fonemas/silencio.wav"
+        return "error"

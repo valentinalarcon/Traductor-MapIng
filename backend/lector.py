@@ -1,34 +1,31 @@
-from playsound import playsound
-import json
-import sys
 
 def diccRutas(array, letra):
 	dicc = {
-		"e": "assets/Fonemas/Vocales/e.wav",
-		"i": "assets/Fonemas/Vocales/i.wav",
-		"a": "assets/Fonemas/Vocales/a.wav",
-		"o": "assets/Fonemas/Vocales/o.wav",
-		"u": "assets/Fonemas/Vocales/u.wav",
-		"ü": "assets/Fonemas/Vocales/ü.wav",
-		"t": "assets/Fonemas/CH/ch.wav",
-		"θ": "assets/Fonemas/D/d.wav",
-		"f": "assets/Fonemas/F/f.wav",
-		"g": "assets/Fonemas/G/g.wav",
-		"k": "assets/Fonemas/K/k.wav",
-		"l": "assets/Fonemas/L/l.wav",
-		"ʎ": "assets/Fonemas/Ll/Ll.wav",
-		"m": "assets/Fonemas/M/m.wav",
-		"n": "assets/Fonemas/N/n.wav",
-		"": "assets/Fonemas/NG/ng.wav",
-		"": "assets/Fonemas/Ñ/ñ.wav",
-		"p": "assets/Fonemas/P/p - 2.wav",
-		"": "assets/Fonemas/R/r.wav",
-		"s": "assets/Fonemas/S/s.wav",
-		"t": "assets/Fonemas/T/t.wav",
-		"": "assets/Fonemas/TR/tr.wav",
-		"w": "assets/Fonemas/W/w.wav",
-		"j": "assets/Fonemas/Y/y.wav",
-		" ": "assets/Fonemas/silencio.wav",
+		"e": "assets/audios/e.wav",
+		"i": "assets/audios/i.wav",
+		"a": "assets/audios/a.wav",
+		"o": "assets/audios/o.wav",
+		"u": "assets/audios/u.wav",
+		"": "assets/audios/u2.wav",
+		"t": "assets/audios/ch.wav",
+		"θ": "assets/audios/d.wav",
+		"f": "assets/audios/f.wav",
+		"g": "assets/audios/g.wav",
+		"k": "assets/audios/k.wav",
+		"l": "assets/audios/l.wav",
+		"ʎ": "assets/audios//Ll.wav",
+		"m": "assets/audios/m.wav",
+		"n": "assets/audios/n.wav",
+		"": "assets/audios//ng.wav",
+		"": "assets/audios/enhe.wav",
+		"p": "assets/audios/p.wav",
+		"": "assets/audios/r.wav",
+		"s": "assets/audios/s.wav",
+		"t": "assets/audios/t.wav",
+		"": "assets/audios/tr.wav",
+		"w": "assets/audios/w.wav",
+		"j": "assets/audios/y.wav",
+		" ": "assets/audios/silencio.wav",
 	}
 	array.append(dicc[letra])
 
@@ -87,22 +84,3 @@ def fonemasToRuta(cadena, rutas):
             temp = cadena[i]
         i+=1
         diccRutas(rutas,temp)
-
-
-def reproducir(rutas):
-    for i in rutas:
-        playsound(i)
-
-
-sys.stdout.reconfigure(encoding='utf-8')
-filename = "/home/dymmon/Documentos/tremend/Traductor-MapIng/backend/data/diccionario_fonemas.json"
-with open(filename) as diccionario_fonemas:
-    json_data = json.load(diccionario_fonemas)
-cadena = ""
-string = "teni ke ser de uachipato niño"
-rutas = []
-
-cadena = stringToFonema(string, json_data)
-fonemasToRuta(cadena, rutas)
-#reproducir(rutas)
-
