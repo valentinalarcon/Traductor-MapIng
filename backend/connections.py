@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from services import t_esp_map, t_ing_esp
+from services import t_esp_map, t_ing_esp, tts_map
 
 
 application = Flask(__name__)
@@ -25,6 +25,12 @@ def ingEsp():
 def espMap():
     args = request.get_json(silent=True)
     return jsonify(t_esp_map(args))
+
+@application.route('/translator/ttsmap', methods=['POST'])
+@cross_origin(origin='*')
+def ttsMap():
+    args = request.get_json(silent=True)
+    return jsonify(tts_map(args))
 
 
 if __name__ == '__main__':

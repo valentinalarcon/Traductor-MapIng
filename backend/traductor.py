@@ -68,18 +68,8 @@ def datos(x):
 
 
 	#crear red transformer, entrenar y guardar modelo
-	model = get_model(
-	token_num = max(len(source_token_dict),len(target_token_dict)),
-	embed_dim = 32,
-	encoder_num = 2,
-	decoder_num = 2,
-	head_num = 4,
-	hidden_dim = 128,
-	dropout_rate = 0.05,
-	use_same_embed= False,
-	)
 
-	model.compile('adam', 'sparse_categorical_crossentropy', metrics=['accuracy'])
+	token = max(len(source_token_dict),len(target_token_dict))
 	#model.summary()
 
 	# entrenamiento
@@ -91,13 +81,26 @@ def datos(x):
 	# model.save('modeloentrenado.h5') 
 
 
-	return source_token_dict, target_token_dict, target_token_dict_inv, model
+	return source_token_dict, target_token_dict, target_token_dict_inv, token
 
 
 def translate(modelo, dataset, sentence):
-	source_token_dict, target_token_dict, target_token_dict_inv, model = datos(dataset)
-	#cargar modelo 
+	source_token_dict, target_token_dict, target_token_dict_inv, numero = datos(dataset)
+	#cargar modelo
+	model = get_model(
+    token_num = numero,
+    embed_dim = 32,
+    encoder_num = 3,
+    decoder_num = 3,
+    head_num = 4,
+    hidden_dim = 128,
+    dropout_rate = 0.05,
+    use_same_embed= True,
+	)
+	model.compile('adam', 'sparse_categorical_crossentropy', metrics=['accuracy'])
+	
 	model.load_weights(modelo)
+
 	sentence_tokens = [tokens + ['<END>','<PAD>'] for tokens in [sentence.split(' ')]]
 	tr_input = [list(map(lambda x: source_token_dict[x], tokens))
 				for tokens in sentence_tokens][0]

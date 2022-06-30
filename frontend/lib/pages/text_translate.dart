@@ -88,10 +88,12 @@ class _TextTranslateState extends State<TextTranslate> {
                           topRight: Radius.circular(30.0),
                         ),
                         child: Mensajes(
-                            mensajes: _mensajes,
-                            textoInicial:
-                                "Envia cualquier frase para empezar a traducir",
-                            speaker: mapudungun)),
+                          mensajes: _mensajes,
+                          textoInicial:
+                              "Envia cualquier frase para empezar a traducir",
+                          speaker: mapudungun,
+                          direccion: widget._direccion,
+                        )),
                   ),
                 ),
                 Align(

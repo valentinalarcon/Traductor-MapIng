@@ -39,7 +39,6 @@ def get_cadena_pronunciable(cadena_original):
                 cadena_pronunciable = re.sub(letra, json_data[letra]['pronunciacion'], cadena_pronunciable)
 
              # Si la letra no está en el diccionario, se deja como viene, es decir, no se reemplaza.
-        
     return cadena_pronunciable
 
 

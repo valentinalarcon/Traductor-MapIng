@@ -112,7 +112,7 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
             onTap: () => FocusScope.of(context).unfocus(),
             child: Column(
               children: <Widget>[
-                idk(_mensajes, mapudungun),
+                idk(_mensajes, mapudungun, widget._direccion),
                 Container(
                   decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 217, 217, 217),
@@ -227,7 +227,7 @@ AppBar bar(context, value, direccion) {
   );
 }
 
-Widget idk(enviados, mapudungun) {
+Widget idk(enviados, mapudungun, direccion) {
   return Expanded(
       child: Container(
     decoration: const BoxDecoration(
@@ -239,9 +239,11 @@ Widget idk(enviados, mapudungun) {
       borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
       child: Mensajes(
-          mensajes: enviados,
-          textoInicial: "Presione el mic para empezar grabacion",
-          speaker: mapudungun),
+        mensajes: enviados,
+        textoInicial: "Presione el mic para empezar grabacion",
+        speaker: mapudungun,
+        direccion: direccion,
+      ),
     ),
   ));
 }
