@@ -38,7 +38,7 @@ def stringToFonema(string, json_data):
     while(i<largo):
         aux = True
         if(i<largo-1):
-            if(string[i] == "c"):
+            if(string[i] == "c" and string[i+1] == "h"):
                 temp = string[i]
                 i+=1
                 temp = temp + string[i]

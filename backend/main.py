@@ -1,6 +1,8 @@
 import numpy as np
 from keras_transformer import get_model, decode
 import pandas as pd
+import json
+from lector import stringToFonema
 np.random.seed(0)
 
 
@@ -87,18 +89,35 @@ def datos(x):
 
 
 if __name__ == '__main__':
-	modelo = 'backend/modelo80k-(360).h5'
-	dataset = 'backend/mapespanol - reducido - 80k.csv'
+
+	"""filename = "backend/data/diccionario_fonemas.json"
+	temp = ""
+	with open(filename) as diccionario_fonemas:
+		json_data = json.load(diccionario_fonemas)
+	while(True):
+		print("********************************")
+		print("ingrese frase a modificar")
+		temp = input()
+		print(temp)
+		aux = stringToFonema(temp, json_data)
+		print("frase en fonemas es:")
+		print(aux)"""
+
+
+	dataset = 'backend/mapespanol.csv'
+	modelo = 'backend/mapespanol.h5'
+	#dataset = 'backend/traduccion/mapespanol.csv'
+	#modelo = 'backend/traduccion/modelo252k-(15).h5'
 	source_token_dict, target_token_dict, target_token_dict_inv, numero = datos(dataset)
 	model = get_model(
 	token_num = numero,
 	embed_dim = 32,
-	encoder_num = 3,
-	decoder_num = 3,
+	encoder_num = 2,
+	decoder_num = 2,
 	head_num = 4,
 	hidden_dim = 128,
 	dropout_rate = 0.05,
-	use_same_embed= True,
+	use_same_embed= False,
 	)
 	model.compile('adam', 'sparse_categorical_crossentropy', metrics=['accuracy'])
 

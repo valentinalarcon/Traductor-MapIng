@@ -17,8 +17,8 @@ def t_ing_esp(data):
 
 def t_esp_map(data):
     sentence = str(data["text"])
-    modelo = 'modelo80k-(360).h5'
-    dataset = 'mapespanol - reducido - 80k.csv'
+    modelo = 'mapespanol.h5'
+    dataset = 'mapespanol.csv'
     try:
         traduccion = translate(modelo,dataset, sentence)
         return traduccion

@@ -94,7 +94,7 @@ class _BotonTTSState extends State<BotonTTS> {
         } catch (e) {
           print("Error: $e");
         }
-        await Future.delayed(const Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 300));
       }
     }
   }

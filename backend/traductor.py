@@ -90,12 +90,12 @@ def translate(modelo, dataset, sentence):
 	model = get_model(
     token_num = numero,
     embed_dim = 32,
-    encoder_num = 3,
-    decoder_num = 3,
+    encoder_num = 2,
+    decoder_num = 2,
     head_num = 4,
     hidden_dim = 128,
     dropout_rate = 0.05,
-    use_same_embed= True,
+    use_same_embed= False,
 	)
 	model.compile('adam', 'sparse_categorical_crossentropy', metrics=['accuracy'])
 	
