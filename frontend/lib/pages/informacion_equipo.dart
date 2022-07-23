@@ -18,6 +18,197 @@ class _InfoEquipoState extends State<InfoEquipo> {
       home: Scaffold(
         appBar: bar(context, widget.value, widget._direccion),
         backgroundColor: bColor(widget.value),
+        body: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Lider de grupo",
+                  style: titulo(widget.value),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+                child: Text(
+                  "Manuel Toledo",
+                  style: texto(widget.value),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Lideres de equipos",
+                  style: titulo(widget.value),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Investigación",
+                  style: subTitulo(widget.value),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                child: Text(
+                  "Javier Cisternas",
+                  style: texto(widget.value),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Documentación",
+                  style: subTitulo(widget.value),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                child: Text(
+                  "Jennifer Portiño",
+                  style: texto(widget.value),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Desarrollo",
+                  style: subTitulo(widget.value),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+                child: Text(
+                  "Valentina Tobar",
+                  style: texto(widget.value),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Equipo de Investigación",
+                  style: subTitulo(widget.value),
+                ),
+              ),
+              SizedBox(
+                child: Column(
+                  children: [
+                    Text(
+                      "Diego Salinas",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Axel Brito",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Diego Tapia",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Luis Correa",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Luis Rivas",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Luis Salinas",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Paulo Vera",
+                      style: texto(widget.value),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Equipo de Documentación",
+                  style: subTitulo(widget.value),
+                ),
+              ),
+              SizedBox(
+                child: Column(
+                  children: [
+                    Text(
+                      "Alonso Pino",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Axel Jerez",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Brandon Corman",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Lukas Jara",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Sebastián Muñoz",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Esteban Tudela",
+                      style: texto(widget.value),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                height: 20,
+                child: Text(
+                  "Equipo de Desarrollo",
+                  style: subTitulo(widget.value),
+                ),
+              ),
+              SizedBox(
+                child: Column(
+                  children: [
+                    Text(
+                      "Carlos Montuyao",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Dante Cáceres",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Lukas Muñoz",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Facundo Alexandre",
+                      style: texto(widget.value),
+                    ),
+                    Text(
+                      "Javier Garrido",
+                      style: texto(widget.value),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -65,4 +256,19 @@ Color bColor(value) {
 Color tColor(value) {
   const List<Color> temas = [Colors.black, Colors.white];
   return temas[value ? 0 : 1];
+}
+
+TextStyle titulo(value) {
+  return TextStyle(
+      color: tColor(value), fontSize: 18, fontWeight: FontWeight.bold);
+}
+
+TextStyle subTitulo(value) {
+  return TextStyle(
+      color: tColor(value), fontSize: 16, fontWeight: FontWeight.bold);
+}
+
+TextStyle texto(value) {
+  return TextStyle(
+      color: tColor(value), fontSize: 15, fontWeight: FontWeight.w500);
 }
