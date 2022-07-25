@@ -118,7 +118,7 @@ class _TextTranslateState extends State<TextTranslate> {
                             )),
                             IconButton(
                                 onPressed: () async {
-                                  temp = myController.text;
+                                  temp = myController.text.toLowerCase();
                                   String traducido = await conectar(
                                       currentValue, temp, widget._direccion);
                                   setState(() {

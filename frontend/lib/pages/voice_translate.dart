@@ -136,7 +136,7 @@ class _VoiceTranslateState extends State<VoiceTranslate> {
                       ),
                       IconButton(
                           onPressed: () async {
-                            aux = _text;
+                            aux = _text.toLowerCase();
                             String translate = await conectar(
                                 currentValue, aux, widget._direccion);
                             setState(() {
